@@ -1,0 +1,69 @@
+name: Deploy Databricks Bundle
+on:
+  workflow_call:
+    inputs:
+      target_env:
+        required: true
+        type: string
+        description: "Target environment (development/production)"
+      repo_owner:
+        required: true
+        type: string
+        description: "Owner of the repository containing the bundle"
+      repo_name:
+        required: true
+        type: string
+        description: "Name of the repository containing the bundle"
+    secrets:
+      REPO_READ_TOKEN:
+        required: true
+        description: "PAT token to read the bundle repository"
+      DATABRICKS_HOST:
+        required: true
+        description: "Databricks workspace host URL"
+      DATABRICKS_TOKEN:
+        required: true
+        description: "Databricks authentication token"
+  
+  repository_dispatch:
+    types: [deploy_desarrollo, deploy_produccion]
+
+env:
+  REPO_OWNER_IN: ${{ inputs.repo_owner || github.event.client_payload.repo_owner }}
+  REPO_NAME_IN: ${{ inputs.repo_name || github.event.client_payload.repo_name }}
+  TARGET_ENV: ${{ inputs.target_env || github.event.client_payload.target_env }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código del proyecto
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPO_OWNER_IN }}/${{ env.REPO_NAME_IN }}
+          token: ${{ secrets.REPO_READ_TOKEN }}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install Databricks CLI
+        run: |
+          pip install databricks-cli
+          
+      - name: Configure Databricks
+        run: |
+          databricks configure --token
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          
+      - name: Validate Bundle
+        run: databricks bundle validate --target "${TARGET_ENV}"
+        
+      - name: Deploy Bundle
+        run: databricks bundle deploy --target "${TARGET_ENV}"
+        
+      - name: List Workspace
+        run: databricks workspace list
