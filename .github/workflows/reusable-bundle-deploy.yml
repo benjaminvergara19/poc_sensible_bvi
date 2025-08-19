@@ -53,6 +53,14 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           echo "/github/home/.databricks/bin" >> $GITHUB_PATH
           
+      - name: Show Bundle Configuration
+        run: |
+          echo "=== Bundle Configuration ==="
+          cat databricks.yml
+          echo ""
+          echo "=== Resource Files ==="
+          find resources -name "*.yml" -exec echo "File: {}" \; -exec cat {} \; -exec echo "" \;
+        
       - name: Validate Bundle
         run: databricks bundle validate --target "${TARGET_ENV}"
         env:
@@ -60,13 +68,13 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         
       - name: Deploy Bundle
-        run: databricks bundle deploy --target "${TARGET_ENV}"
+        run: databricks bundle deploy --target "${TARGET_ENV}" --verbose
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         
       - name: List Workspace
-        run: databricks workspace list
+        run: databricks workspace list /
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
