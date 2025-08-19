@@ -52,18 +52,20 @@ jobs:
         run: |
           pip install databricks-cli
           
-      - name: Configure Databricks
-        run: |
-          databricks configure --token
+      - name: Validate Bundle
+        run: databricks bundle validate --target "${TARGET_ENV}"
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-          
-      - name: Validate Bundle
-        run: databricks bundle validate --target "${TARGET_ENV}"
         
       - name: Deploy Bundle
         run: databricks bundle deploy --target "${TARGET_ENV}"
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         
       - name: List Workspace
         run: databricks workspace list
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
