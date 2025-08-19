@@ -11,17 +11,17 @@
 
 #### REPO_READ_TOKEN
 - **Name:** `REPO_READ_TOKEN`
-- **Secret:** `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`
+- **Secret:** `[PAT TOKEN PROVIDED SEPARATELY]`
 - **Descripción:** PAT token para leer el repositorio poc_publico_bvi
 
 #### DATABRICKS_HOST
 - **Name:** `DATABRICKS_HOST`
-- **Secret:** `https://adb-1193445751689943.3.azuredatabricks.net/`
+- **Secret:** `[DATABRICKS HOST URL PROVIDED SEPARATELY]`
 - **Descripción:** URL del workspace de Databricks
 
 #### DATABRICKS_TOKEN
 - **Name:** `DATABRICKS_TOKEN`
-- **Secret:** `dapi0dda4e156c951a7a00258ca167663ed7-3`
+- **Secret:** `[DATABRICKS TOKEN PROVIDED SEPARATELY]`
 - **Descripción:** Token de autenticación de Databricks
 
 ## Pasos para configurar:
