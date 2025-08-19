@@ -50,7 +50,8 @@ jobs:
           
       - name: Install Databricks CLI
         run: |
-          pip install databricks-cli
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          echo "/github/home/.databricks/bin" >> $GITHUB_PATH
           
       - name: Validate Bundle
         run: databricks bundle validate --target "${TARGET_ENV}"
