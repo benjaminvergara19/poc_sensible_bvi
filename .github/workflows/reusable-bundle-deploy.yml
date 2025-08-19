@@ -29,9 +29,9 @@ on:
     types: [deploy_desarrollo, deploy_produccion]
 
 env:
-  REPO_OWNER_IN: ${{ inputs.repo_owner || github.event.client_payload.repo_owner }}
-  REPO_NAME_IN: ${{ inputs.repo_name || github.event.client_payload.repo_name }}
-  TARGET_ENV: ${{ inputs.target_env || github.event.client_payload.target_env }}
+  REPO_OWNER_IN: ${{ inputs.repo_owner || github.event.client_payload.repo_owner || 'benjaminvergara19' }}
+  REPO_NAME_IN: ${{ inputs.repo_name || github.event.client_payload.repo_name || 'poc_publico_bvi' }}
+  TARGET_ENV: ${{ inputs.target_env || github.event.client_payload.target_env || 'development' }}
 
 jobs:
   deploy:
