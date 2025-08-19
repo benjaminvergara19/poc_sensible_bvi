@@ -73,8 +73,21 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         
-      - name: List Workspace
-        run: databricks workspace list /
+      - name: List Created Jobs
+        run: |
+          echo "=== Listing all jobs ==="
+          databricks jobs list
+          echo ""
+          echo "=== Searching for Poc jobs ==="
+          databricks jobs list | grep -i "poc" || echo "No jobs found with 'poc' in name"
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          
+      - name: List Workspace Bundle
+        run: |
+          echo "=== Bundle workspace contents ==="
+          databricks workspace list /Users/benjamin.vergara@uc.cl/.bundle/Poc/development/ || echo "Bundle path not found"
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
